@@ -10,24 +10,18 @@ namespace EventAPI.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
-        private readonly IReservationService _reservationService;
-        private readonly ICommentService _commentService;
 
         public EventController(
-            IEventService eventService,
-            IReservationService reservationService,
-            ICommentService commentService)
+            IEventService eventService)
         {
             _eventService = eventService;
-            _reservationService = reservationService;
-            _commentService = commentService;
         }
 
         // GET: api/event?category=Sports
-        [HttpGet]
-        public async Task<IActionResult> GetByCategory(string? name)
+        [HttpGet("categoryName")]
+        public async Task<IActionResult> GetByCategory(string? categoryName)
         {
-            var events = await _eventService.GetEventsByCategoryNameAsync(name);
+            var events = await _eventService.GetEventsByCategoryNameAsync(categoryName);
             return Ok(events);
         }
 
@@ -42,36 +36,50 @@ namespace EventAPI.Controllers
             return Ok(ev);
         }
 
-        // POST: api/event/book
-        [HttpPost("book")]
-        public async Task<IActionResult> BookEvent(Reservation reservation)
+
+
+        //
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllEvents()
         {
-            if (reservation == null)
-                return BadRequest();
-
-            await _reservationService.AddReservationAsync(reservation);
-
-            return Ok(new { message = "Reservation saved successfully" });
+            var data = await _eventService.GetAllAsync();
+            return Ok(data);
         }
 
-        // GET: api/event/search?searchTerm=x&category=Sports
-        [HttpGet("search")]
-        public async Task<IActionResult> Search(string searchTerm, string category)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEventById(int id)
         {
-            var result = await _eventService.SearchEventsAsync(searchTerm, category);
-            return Ok(result);
+            var ev = await _eventService.GetByIdAsync(id);
+            if (ev == null) return NotFound();
+
+            return Ok(ev);
         }
 
-        // POST: api/event/add-comment
-        [HttpPost("add-comment")]
-        public async Task<IActionResult> AddComment(int eventId, string commentText)
+        [HttpPost]
+        public async Task<IActionResult> CreateEvent([FromBody] Event model)
         {
-            if (string.IsNullOrWhiteSpace(commentText))
-                return BadRequest("Empty comment");
-
-            await _commentService.AddCommentAsync(eventId, commentText);
-
-            return Ok(new { message = "Comment added" });
+            var created = await _eventService.CreateAsync(model);
+            return Ok(created);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEvent(int id, [FromBody] Event model)
+        {
+            var updated = await _eventService.UpdateAsync(id, model);
+            if (updated == null) return NotFound();
+
+            return Ok(updated);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
+            bool deleted = await _eventService.DeleteAsync(id);
+            if (!deleted) return NotFound();
+
+            return Ok(new { message = "Deleted successfully" });
+        }
+
     }
 }

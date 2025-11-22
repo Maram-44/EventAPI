@@ -13,9 +13,29 @@ namespace EventAPI.Services
             _repo = repo;
         }
 
-        public async Task AddReservationAsync(Reservation reservation)
+        //public async Task AddReservationAsync(Reservation reservation)
+        //{
+        //    await _repo.AddOneAsync(reservation);
+        //}
+
+        //my event
+
+        public async Task<IEnumerable<Reservation>> GetAllAsync()
         {
-            await _repo.AddOneAsync(reservation);
+            return await _repo.FindAllAsync("Event", "User");
+        }
+
+        //public async Task<Reservation?> GetByIdAsync(int id)
+        //{
+        //    return await _repo.GetFirstOrDefaultAsync(r => r.IdNumber == id);
+        //}
+
+        public async Task<Reservation> CreateAsync(Reservation model)
+        {
+            model.BookingDate = DateTime.Now;
+
+            await _repo.AddOneAsync(model);
+            return model;
         }
     }
 }

@@ -6,6 +6,14 @@ namespace EventAPI.Services.IServices
     {
         Task<IEnumerable<Event>> GetEventsByCategoryNameAsync(string? name);
         Task<Event?> GetEventWithCommentsAsync(int id);
-        Task<IEnumerable<object>> SearchEventsAsync(string searchTerm, string category);
+
+        //myEvents
+
+        Task<IEnumerable<Event>> GetAllAsync();
+        Task<Event?> GetByIdAsync(int id);
+        Task<Event> CreateAsync(Event model);
+        Task<Event?> UpdateAsync(int id, Event model);
+        Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<object>> GetCalendarAsync();
     }
 }

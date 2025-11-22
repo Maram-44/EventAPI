@@ -13,16 +13,29 @@ namespace EventAPI.Services
             _repo = repo;
         }
 
-        public async Task AddCommentAsync(int eventId, string commentText)
-        {
-            Comment newComment = new Comment
-            {
-                EventId = eventId,
-                UserId = 1,
-                Comment1 = commentText
-            };
+        //public async Task AddCommentAsync(int eventId, string commentText)
+        //{
+        //    Comment newComment = new Comment
+        //    {
+        //        EventId = eventId,
+        //        UserId = 1,
+        //        Comment1 = commentText
+        //    };
 
-            await _repo.AddOneAsync(newComment);
+        //    await _repo.AddOneAsync(newComment);
+        //}
+
+        //my event
+
+        public async Task<Comment> AddCommentAsync(Comment model)
+        {
+            await _repo.AddOneAsync(model);
+            return model;
         }
+
+        //public async Task<IEnumerable<Comment>> GetCommentsByEventIdAsync(int eventId)
+        //{
+        //    return await _repo.FindAll()
+        //}
     }
 }

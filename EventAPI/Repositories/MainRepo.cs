@@ -118,6 +118,12 @@ namespace EventAPI.Repositories
             await context.SaveChangesAsync();
         }
 
+        public async Task DeleteOneAsync(T entity)
+        {
+            context.Set<T>().Remove(entity);
+            await context.SaveChangesAsync();
+        }
+
         public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
         {
             return await context.Set<T>().FirstOrDefaultAsync(predicate);

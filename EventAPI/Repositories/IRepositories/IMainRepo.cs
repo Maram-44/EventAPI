@@ -33,5 +33,7 @@ namespace EventAPI.Repositories.IRepositories
         Task AddOneAsync(T entity);
         Task UpdateOneAsync(T entity);
         Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
+
+        Task DeleteOneAsync(T entity);
     }
 }

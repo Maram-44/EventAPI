@@ -38,28 +38,73 @@ namespace EventAPI.Services
                 .ContinueWith(t => t.Result.FirstOrDefault(e => e.Id == id));
         }
 
-        public async Task<IEnumerable<object>> SearchEventsAsync(string searchTerm, string category)
+        //my event
+
+        public async Task<IEnumerable<Event>> GetAllAsync()
         {
-            var categoryEntity = await _categoryRepo
-                .GetFirstOrDefaultAsync(c => c.CategoryName == category);
+            return await _eventRepo.FindAllAsync("CategoryNavigation");
+        }
 
-            int categoryId = categoryEntity?.Id ?? 0;
+        public async Task<Event?> GetByIdAsync(int id)
+        {
+            return await _eventRepo.GetFirstOrDefaultAsync(e => e.Id == id);
+        }
 
+        public async Task<Event> CreateAsync(Event model)
+        {
+            await _eventRepo.AddOneAsync(model);
+            return model;
+        }
+
+        public async Task<Event?> UpdateAsync(int id, Event model)
+        {
+            var old = await _eventRepo.FindByIdAsync(id);
+            if (old == null)
+                return null;
+
+            // اي تحديثات إضافية حسب حقل معين
+            old.Name = model.Name;
+            old.PlaceName = model.PlaceName;
+            old.City = model.City;
+            old.Category = model.Category;
+            old.Discription = model.Discription;
+            old.Price = model.Price;
+            old.StartDate = model.StartDate;
+            old.FinishDate = model.FinishDate;
+            old.StartTime = model.StartTime;
+            old.FineshTime = model.FineshTime;
+            old.ConstraintAge = model.ConstraintAge;
+            old.Image = model.Image;
+
+            await _eventRepo.UpdateOneAsync(old);
+            return old;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var obj = await _eventRepo.FindByIdAsync(id);
+            if (obj == null)
+                return false;
+
+            await _eventRepo.DeleteOneAsync(obj);
+            return true;
+        }
+
+        public async Task<IEnumerable<object>> GetCalendarAsync()
+        {
             var events = await _eventRepo.FindAllAsync();
 
-            var filtered = events
-                .Where(e =>
-                    (string.IsNullOrEmpty(searchTerm) || e.Name.Contains(searchTerm)) &&
-                    (string.IsNullOrEmpty(category) || e.Category == categoryId))
-                .Select(e => new
-                {
-                    id = e.Id,
-                    name = e.Name,
-                    discription = e.Discription,
-                    image = e.Image
-                });
+            var result = events.Select(e => new
+            {
+                e.Id,
+                e.Name,
+                e.PlaceName,
+                e.Discription,
+                e.StartDate,
+                e.StartTime
+            });
 
-            return filtered;
+            return result;
         }
     }
 }
