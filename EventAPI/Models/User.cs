@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EventAPI.Models;
 
@@ -18,10 +19,10 @@ public class User
     public string UserName { get; set; } = null!;
     [Required]
     public string Password { get; set; } = null!;
-
+    [JsonIgnore]
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
+    [JsonIgnore]
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();
-
+    [JsonIgnore]
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }

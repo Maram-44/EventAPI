@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EventAPI.Models;
 
@@ -18,8 +19,8 @@ public partial class Reservation
     public int EventId { get; set; }
     [Required]
     public int UserId { get; set; }
+    [JsonIgnore]
+    public virtual Event? Event { get; set; }
 
-    public virtual Event Event { get; set; } = null!;
-
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EventAPI.Models;
 
@@ -33,12 +34,12 @@ public partial class Event
     public string? Image { get; set; }
 
     public string? ConstraintAge { get; set; }
-
+    [JsonIgnore]
     public virtual EventCategory CategoryNavigation { get; set; } = null!;
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
+    [JsonIgnore]
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
-
+    [JsonIgnore]
     public virtual User? User { get; set; }
 }

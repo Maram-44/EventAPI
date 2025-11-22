@@ -1,6 +1,8 @@
 using EventAPI.Data;
 using EventAPI.Repositories;
 using EventAPI.Repositories.IRepositories;
+using EventAPI.Services;
+using EventAPI.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<EventContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("myConnection")));
 builder.Services.AddScoped(typeof(IMainRepo<>),typeof(MainRepo<>));
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 var app = builder.Build();
 
