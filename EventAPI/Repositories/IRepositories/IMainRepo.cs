@@ -35,5 +35,7 @@ namespace EventAPI.Repositories.IRepositories
         Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
 
         Task DeleteOneAsync(T entity);
+
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, params string[] includes);
     }
 }

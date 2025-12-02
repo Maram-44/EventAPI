@@ -17,12 +17,16 @@ namespace EventAPI.Controllers
             _eventService = eventService;
         }
 
-        // GET: api/event?category=Sports
-        [HttpGet("categoryName")]
-        public async Task<IActionResult> GetByCategory(string? categoryName)
+        [HttpGet("category/{categoryId}")]
+        public async Task<IActionResult> GetByCategoryId(int categoryId)
         {
-            var events = await _eventService.GetEventsByCategoryNameAsync(categoryName);
+            var events = await  _eventService.GetEventsByCategoryId(categoryId);
+
+            if(events == null)
+                return NotFound();
+
             return Ok(events);
+            
         }
 
         // GET: api/event/details/5

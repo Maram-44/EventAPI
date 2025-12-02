@@ -7,28 +7,17 @@ namespace EventAPI.Services
     public class EventService : IEventService
     {
         private readonly IMainRepo<Event> _eventRepo;
-        private readonly IMainRepo<EventCategory> _categoryRepo;
 
         public EventService(
-            IMainRepo<Event> eventRepo,
-            IMainRepo<EventCategory> categoryRepo)
+            IMainRepo<Event> eventRepo)
         {
             _eventRepo = eventRepo;
-            _categoryRepo = categoryRepo;
         }
 
-        public async Task<IEnumerable<Event>> GetEventsByCategoryNameAsync(string? name)
+        public async Task<IEnumerable<Event>> GetEventsByCategoryId(int CategoryId)
         {
-            if (string.IsNullOrEmpty(name))
-                return await _eventRepo.FindAllAsync();
-
-            var category = await _categoryRepo
-                .GetFirstOrDefaultAsync(c => c.CategoryName == name);
-
-            if (category == null)
-                return Enumerable.Empty<Event>();
-
-            return await _eventRepo.FindAllAsync();
+            var all = await _eventRepo.FindAllAsync();
+            return all.Where(e => e.Category == CategoryId);
         }
 
         public async Task<Event?> GetEventWithCommentsAsync(int id)

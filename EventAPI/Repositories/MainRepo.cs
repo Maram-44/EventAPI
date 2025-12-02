@@ -128,5 +128,16 @@ namespace EventAPI.Repositories
         {
             return await context.Set<T>().FirstOrDefaultAsync(predicate);
         }
+
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, params string[] includes)
+        {
+            IQueryable<T> query = context.Set<T>();
+
+            foreach (var inc in includes)
+                query = query.Include(inc);
+
+            return await query.Where(predicate).ToListAsync();
+        }
+
     }
 }

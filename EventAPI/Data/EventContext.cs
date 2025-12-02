@@ -125,7 +125,6 @@ namespace EventAPI.Data
                 entity.ToTable("User");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-                entity.Property(e => e.Email).HasColumnName("email");
                 entity.Property(e => e.Name).HasColumnName("name");
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)

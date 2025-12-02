@@ -35,10 +35,10 @@ public partial class Event
 
     public string? ConstraintAge { get; set; }
     [JsonIgnore]
-    public virtual EventCategory? CategoryNavigation { get; set; }
-    public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
+    public  EventCategory? CategoryNavigation { get; set; }
+    public  ICollection<Comment>? Comments { get; set; } = new List<Comment>();
     [JsonIgnore]
-    public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+    public  ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     [JsonIgnore]
-    public virtual User? User { get; set; }
+    public  User? User { get; set; }
 }

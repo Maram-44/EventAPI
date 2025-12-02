@@ -4,7 +4,7 @@ namespace EventAPI.Services.IServices
 {
     public interface IEventService
     {
-        Task<IEnumerable<Event>> GetEventsByCategoryNameAsync(string? name);
+        Task<IEnumerable<Event>> GetEventsByCategoryId(int CategoryId);
         Task<Event?> GetEventWithCommentsAsync(int id);
 
         //myEvents

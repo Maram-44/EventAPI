@@ -19,8 +19,23 @@ builder.Services.AddScoped(typeof(IMainRepo<>),typeof(MainRepo<>));
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IEventCategoryServices, EventCategoryServices>();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowAngular");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
